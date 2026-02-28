@@ -9,17 +9,17 @@ const addDoctor= async (req,res)=>{
         const {name,email,password,speciality,degree,experience,about,fees,address} = req.body
         const imageFile=req.file
         console.log({name,email,password,speciality,degree,experience,about,fees,address},imageFile)
-        if(!name,!email,!password,!speciality,!degree,!experience,!about,!fees,!address){
-            return res.json({success:false,message:"please enter a valid email"})
+        if(!name || !email || !password || !speciality || !degree || !experience || !about || !fees || !address){
+            return res.json({success:false,k:"hello",j:4,message:"Some thing is missing",extram:`${degree}`})
         }
         //validating email format
         if(!validator.isEmail(email)){
-            return res.json({success:false,message:"Please enter a valid email"})
+            return res.json({success:false,message:"Please enter a valid email, validator failed"})
         }
         //validating strong password
         if(password.length <8){
 
-            return res.json({success:false,message:"Please enter a strong email"})
+            return res.json({success:false,message:"Please enter a strong password of minimum 8 characters"})
         }
 
         //hashing doctor password
@@ -27,6 +27,7 @@ const addDoctor= async (req,res)=>{
         const hashedPassword = await bcrypt.hash(password, salt)
 
         //upload image to cloudinary
+        console.log("Uploading image to cloudinary",imageFile)
         const imageUpload = await cloudinary.uploader.upload(imageFile.path,{resource_type:"image"})
         const imageUrl = imageUpload.secure_url
 
@@ -51,7 +52,7 @@ const addDoctor= async (req,res)=>{
     } catch(err){
 
         console.log(err)
-        res.json({sucess:false,message:err.message})
+        res.json({sucess:"false",message:err.message})
 
     }
 }
@@ -76,4 +77,15 @@ const loginAdmin = async (req,res)=>{
         res.json({sucess:false,message:err.message})
     }
 }
-export  {addDoctor,loginAdmin}
+
+//Api to get all doctors list for admin panel
+const allDoctors= async (req,res)=>{
+    try{
+        const doctors = await doctorModel.find({}).select("-password")
+        res.json({success:true,doctors})
+    }catch(err){
+        console.log(err)
+        res.json({sucess:false,message:err.message})
+    }
+}
+export  {addDoctor,loginAdmin,allDoctors}

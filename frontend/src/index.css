@@ -10,9 +10,9 @@
 }
 
 
-body{
+/* body{
   @apply lg:mx-[150px] mx-[10px]
-}
+} */
 ::-webkit-scrollbar{
   @apply hidden;
 }

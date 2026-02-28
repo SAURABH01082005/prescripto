@@ -5,7 +5,7 @@ const doctorSchema = new mongoose.Schema({
         type:String,required:true
     },
     email:{
-        type:String,required:true,unique:true
+        type:String,required:true
     },
     password:{
         type:String,required:true
@@ -14,6 +14,9 @@ const doctorSchema = new mongoose.Schema({
         type:String,required:true,
     },
     degree:{
+        type:String,required:true,
+    },
+    speciality:{
         type:String,required:true,
     },
     experience:{
@@ -29,16 +32,16 @@ const doctorSchema = new mongoose.Schema({
         type:Number,required:true,
     },
     address:{
-        type:Object,required:true,
+        type:Object,required:true,default:{line1:"",line2:"",},
     },
     date:{
-        type:Number,required:true,
+        type:Number,required:true
     },
     slots_booked:{
         type:Object,default:{}
     }
 },{minimize:false})
 
-const doctorModel =mongoose.models.doctor || mongoose.model("doctor",doctorSchema)
+const doctorModel =mongoose.models.doctor || mongoose.model("doctor",doctorSchema)// if doctor modlel is not present; prevent multiple moment
 
 export default doctorModel

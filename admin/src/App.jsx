@@ -16,7 +16,7 @@ function App() {
   const {aToken} = useContext(AdminContext)
 
   return  aToken? (
-    <div className='bg-[#f8f9fd]'>
+    <div className='bg-[#F8F9FD]'>
       <ToastContainer/>
       <Navbar/>
       <div className='flex items-start'>
