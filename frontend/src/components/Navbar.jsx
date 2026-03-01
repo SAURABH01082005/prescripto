@@ -38,7 +38,7 @@ function Navbar() {
             {
             token
             ? <div onClick={()=> setOpen(!open)}  className='flex items-center gap-2 cursor-pointer  relative group '>
-                <img src={userData.image} className='w-8 rounded-full' alt="profile_pic" />
+                <img src={userData?.image} className='w-8 rounded-full' alt="profile_pic" />
                 <img src={assets.dropdown_icon} className ="w-2.5 " alt="dropdown_icon" />
                 <div className={`absolute top-0 right-0 font-medium pt-14 text-base text-gray-600 z-20 ${open ? "block" : "hidden"} `}>
                     <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>

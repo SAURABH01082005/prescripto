@@ -5,6 +5,8 @@ import bcrypt from "bcryptjs"
 import userModel from "../model/userModel.js"
 import jwt from "jsonwebtoken"
 import { json } from "express"
+import doctorModel from "../model/doctorModel.js"
+import appointmentModel from "../model/appointmentModel.js"
 
 const registerUser=async (req,res)=>{
 
@@ -118,6 +120,8 @@ const updatePofile = async (req,res)=>{
 //api to book appointment
 
 const bookAppointment = async (req,res)=>{
+    const userId= req.userId
+    req.body.userId=userId
     try{
         const {userId,docId,slotTime,slotDate}=req.body
         const docData =await doctorModel.findById(docId).select('-password')
@@ -139,11 +143,13 @@ const bookAppointment = async (req,res)=>{
         }
 
         const userData = await userModel.findById(userId).select("-password")
+        console.log("userData",userData);
         delete docData.slots_booked
         const appointment ={
             userId,
             docId,
             slotTime,
+            slotDate,
             docData,
             userData,
             amount:docData.fees,
@@ -151,6 +157,7 @@ const bookAppointment = async (req,res)=>{
         }
         const newAppointment = new appointmentModel(appointment)
         await newAppointment.save()
+        
         await doctorModel.findByIdAndUpdate(docId,{slots_booked})
         res.json({success:true,message:"Appointment booked successfully"})
 
@@ -162,4 +169,17 @@ const bookAppointment = async (req,res)=>{
 }
 
 
-export {registerUser,loginUser,getProfile, updatePofile,bookAppointment}
+//api to get list of appointment for frontend myappointment page
+const listAppointments = async (req,res)=>{
+    try{
+        const {userId} = req.body
+        const appointments = await appointmentModel.find({userId})
+
+        res.json({success:true,appointments})
+
+    }catch(err){
+        res.json({success:false,message:err.message})
+    }
+}
+
+export {registerUser,loginUser,getProfile, updatePofile,bookAppointment,listAppointments}

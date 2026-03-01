@@ -6,6 +6,7 @@ const appointmentSchema = new mongoose.Schema({
     slotTime:{type:String , required:true},
     slotDate:{type:String , required:true},
     userData:{type:Object , required:true},
+    // docData:{type:Object , required:true},
     amount :{type:Number , required:true},
     date:{type:Number , required:true},
     cancelled: {type:Boolean , default:false},
@@ -14,3 +15,4 @@ const appointmentSchema = new mongoose.Schema({
 })
 
 const appointmentModel = mongoose.model("appointment", appointmentSchema);
+export default appointmentModel;

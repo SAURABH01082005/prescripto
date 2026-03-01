@@ -2,12 +2,26 @@ import React, { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 
 export default function MyAppointment() {
-  const {doctors}= useContext(AppContext);
+  const {backendUrl , token}= useContext(AppContext);
+
+  const [appointments,setAppointments]=useState([]);
+  const getUserAppointments = async()=>{
+    try{
+      const {data} = await axios.get(backendUrl+"/api/user/appointments",{
+        headers:{token:token}
+      })
+
+      setAppointments(data.appointments)
+
+    }catch(err){
+      console.log(err)
+    } 
+  }
   return (
     <div className=''>
       <p className='pb-3 mt-12  font-medium text-zinc-700 border-b'>My Appointments</p>
       <div className=''>
-        {doctors.slice(0,2).map((item,index)=>(
+        {appointments.slice(0,2).map((item,index)=>(
           <div className='grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border-b' key={index}>
             <div>
               <img className='w-32 bg-indigo-50'  src={item.image} alt="" />
