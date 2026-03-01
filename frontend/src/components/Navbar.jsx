@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import { assets } from '../assets/assets_frontend/assets'
-import  {NavLink}  from 'react-router'
-import { useNavigate } from 'react-router'
+import  {NavLink,useNavigate}  from 'react-router-dom'
+import { AppContext } from '../context/AppContext'
+
+
 function Navbar() {
+
+
     const [showMenu,setShowMenu]=useState(false);
-    const [token,setToken]=useState(true);
     const [open, setOpen] = useState(false);
     const navigate=useNavigate();
+    const {token,setToken,userData} = useContext(AppContext);
+
+    const logoutHandler =()=>{
+        setToken(false)
+        localStorage.removeItem("token")
+        
+    }
   return (
     <div className=' flex items-center justify-between text-sm py-4 mb-5 border-b  border-gray-400 '>
         <img src={assets.logo} onClick={()=>navigate("/")}  alt="logo" className=' w-44 cursor-pointer ' />
@@ -28,13 +38,13 @@ function Navbar() {
             {
             token
             ? <div onClick={()=> setOpen(!open)}  className='flex items-center gap-2 cursor-pointer  relative group '>
-                <img src={assets.profile_pic} className='w-8 rounded-full' alt="profile_pic" />
+                <img src={userData.image} className='w-8 rounded-full' alt="profile_pic" />
                 <img src={assets.dropdown_icon} className ="w-2.5 " alt="dropdown_icon" />
                 <div className={`absolute top-0 right-0 font-medium pt-14 text-base text-gray-600 z-20 ${open ? "block" : "hidden"} `}>
                     <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
                     <p onClick={()=>navigate("./myprofile")} className='hover:text-black cursor-pointer'>My Profile</p>
                     <p onClick={()=>navigate("./myappointment")} className='hover:text-black cursor-pointer'>My Appointment</p>
-                    <p onClick={()=>setToken(false)} className='hover:text-black cursor-pointer'>Logout</p>
+                    <p onClick={logoutHandler} className='hover:text-black cursor-pointer'>Logout</p>
                     </div>
                 </div>
             </div>:<button className='bg-(--color-primary) text-white py-2 px-3  md:py-3 md:px-8 rounded-full font-light  md:block cursor-pointer' onClick={()=>navigate("./login")}>Create Account</button>//not hidden

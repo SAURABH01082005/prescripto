@@ -1,17 +1,20 @@
-import React, { use, useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import React, {  useContext, useEffect, useState } from 'react'
+import { useParams,useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext';
 import { assets } from '../assets/assets_frontend/assets';
 import RelatedDoctors from '../components/RelatedDoctors';
+import { toast } from 'react-toastify';
 
 export default function Appointment() {
   const {docId}=useParams();
-  const {doctors,currencySymbol}=useContext(AppContext);
+  const {doctors,currencySymbol,backendUrl,token , getDoctorsData}=useContext(AppContext);
   const [docInfo,setDocInfo]=useState(null);
   const [docSlot,setDocSlot]=useState([])
   const [slotIndex,setSlotIndex]=useState(0);
   const [slotTime,setSlotTime]=useState("");
   const daysOfWeek=['Sun','Mon', 'Tue','Wed','Thus','Fri','Sat']
+
+  const navigate = useNavigate();
 
   const fetchDocData=()=>{
     const selectedDocInfo=doctors.find(doc=>doc._id===docId)
@@ -59,6 +62,17 @@ export default function Appointment() {
 
   }
 
+  const bookAppointment = async ()=>{
+    if(!token){
+      toast.warn("Login to book an appointment")
+      return navigate("/login")
+    }
+    try{
+      
+    }catch(err){
+      console.log(err)
+    }
+  }
   useEffect(()=>{
     console.log(docSlot)
   },[docSlot])
@@ -115,7 +129,7 @@ export default function Appointment() {
             <p onClick={()=>setSlotTime(item.time)} className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time===slotTime? 'bg-primary text-white': 'text-gray-400 border border-gray-300'}`} key={index}> {item.time.toLowerCase()}</p>
           ))}
         </div>
-        <button className='bg-primary text-white text:sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an appointment</button>
+        <button onClick={bookAppointment} className='bg-primary text-white text:sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an appointment</button>
         
       </div>
       {/* listing related doctors */}

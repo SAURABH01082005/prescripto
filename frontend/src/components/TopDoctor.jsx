@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext';
 
 function TopDoctor() {

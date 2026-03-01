@@ -1,6 +1,6 @@
 import React from 'react'
 import { assets } from '../assets/assets_frontend/assets'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 function Banner() {
     const navigate=useNavigate();
