@@ -9,7 +9,7 @@ function Header() {
                 <p className='text-3xl md:text-4xl lg:text-5xl text-white font-semibold leading-tight md:leading-tight lg:leading-tight'>Book Appointment <br />With Trusted Doctors</p>
                 <div className='flex flex-col md:flex-row items-center gap-3 text-white text-sm font-light'>
                     <img src={assets.group_profiles} className='w-28' alt="" />
-                    <p>Simple book your doctor now with trusted web , <br className='hidden sm:block' />schedule also Lorem ipsum dolor sit amet.</p>
+                    <p>Simple book your doctor now with trusted web , <br className='hidden sm:block' />schedule your appointment with Prescripto .</p>
                 </div>
                 <a href="#speciality" className='flex items-center gap-2 bg-white px-8 py-3 rounded-full text-gray-600 text-sm m-auto md:m-0 hover:scale-105 transition-all duration-300'>Book Appointment
                      <img src={assets.arrow_icon} className="w-3" alt="" /></a>

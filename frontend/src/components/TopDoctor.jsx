@@ -9,7 +9,7 @@ function TopDoctor() {
   return (
     <div className='flex flex-col items-center gap-4 my-16 text-gray-900'>
         <h1 className=' text-3xl font-medium'>Top Doctors to Books</h1>
-        <p className='sm:w-1/3 text-center text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, facilis?</p>
+        <p className='sm:w-1/3 text-center text-sm'>Connect with highly rated specialists known for their expertise and exceptional patient care.</p>
         <div className='w-full grid grid-cols-(--grid-template-auto) gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
             {doctors.slice(0,10).map((item,index)=>{
                 return (
