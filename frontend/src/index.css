@@ -3,7 +3,9 @@
 @theme{
   --color-primary:#5f6fff;
   --grid-template-auto: repeat(auto-fill, minmax(200px, 1fr));
+  --color-primary-border:#DCDDE3;
 }
+
 
 *{
   font-family: Outfit;

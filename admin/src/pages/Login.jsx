@@ -3,6 +3,7 @@ import { assets } from '../assets/assets_admin/assets'
 import { AdminContext } from '../contexts/AdminContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { DoctorContext } from '../contexts/DoctorContext'
 
 function Login() {
     const [state ,setState]=useState("Admin")
@@ -10,6 +11,7 @@ function Login() {
     const [email,setEmail]=useState("");
 
     const {setAToken,backendUrl} = useContext(AdminContext)
+    const {setDToken,dToken} = useContext(DoctorContext)
 
     const onSubmitHandler = async (event)=>{
       event.preventDefault()
@@ -25,6 +27,19 @@ function Login() {
           }
 
         }else{
+         
+
+          const {data} = await axios.post(backendUrl+"/api/doctor/login",{email,password})
+          if(data.success){
+            localStorage.setItem("dToken",data.token)
+            setDToken(data.token)
+            console.log(data.token)
+            toast.success("Login Successfully")
+          }
+          else{
+            toast.error(data.message)
+          }
+
 
         }
 
@@ -48,7 +63,7 @@ function Login() {
               <p>password</p>
               <input onChange={(e)=>{setPassword(e.target.value)}} value={password} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="password" required />
             </div>
-            <button className='bg-[var(--color-primary)] text-white w-full py-2 rounded-md text-base'>Login</button>
+            <button className='bg-[var(--color-primary)] text-white w-full py-2 rounded-md text-base cursor-pointer'>Login</button>
             {
               state === 'Admin'
               ? <p>Doctor Login? <span className='text-[var(--color-primary)] underline cursor-pointer ' onClick={()=>setState("Doctor")}>Click here</span></p>
