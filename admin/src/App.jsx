@@ -4,7 +4,7 @@ import './App.css'
 import Login from './pages/Login'
 import { ToastContainer, toast } from 'react-toastify';
 import { AdminContext } from './contexts/AdminContext';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import { Routes ,Route} from 'react-router';
 import Dashboard from './pages/Admin/Dashboard';
