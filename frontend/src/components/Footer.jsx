@@ -8,7 +8,7 @@ function Footer() {
             {/* ----------left side------------ */}
             <div>
                 <img src={assets.logo} alt=""  className='mb-5 w-40'/>
-                <p className='w-full md:w-2/3 text-gray-600 leading-6'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi deserunt praesentium laboriosam non minima distinctio facilis quisquam tempora quis, doloremque cum provident ad incidunt harum exercitationem hic neque dolorem cumque! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere, similique. loerm10
+                <p className='w-full md:w-2/3 text-gray-600 leading-6'>Prescripto is a modern healthcare appointment platform developed by Saurabh Yadav, a Computer Engineering student and tech enthusiast. It enables seamless appointment booking, admin and doctor management, and secure online payments powered by Razorpay.
                 </p>   
             </div>
             {/* ----------center side------------ */}
@@ -27,8 +27,8 @@ function Footer() {
             <div>
                 <p className='text-xl font-medium mb-5'>GET IN TOUCH</p>
                 <ul className='flex flex-col gap-2 text-gray-600'>
-                    <li>+91-93475398357</li>
-                    <li>greatstack@mail.com</li>
+                    <li>+91-8591163765</li>
+                    <li>saurabhyadav000@zohomail.in</li>
                 </ul>
 
             </div>
@@ -36,7 +36,7 @@ function Footer() {
         {/* -----------------------------copy right------------ */}
         <div>
             <hr />
-            <p className='py-5 text-sm text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis id molestiae numquam eius, placeat commodi labore dolorum cumque, quos error iste repellat velit. Voluptas officiis quod odio nulla expedita facere?</p>
+            <p className='py-5 text-sm text-center'>© 2026 Prescripto. All rights reserved. Developed by Saurabh Yadav.</p>
 
         </div>
     </div>
