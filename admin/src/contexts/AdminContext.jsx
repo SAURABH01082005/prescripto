@@ -8,6 +8,8 @@ export const AdminContext = createContext();
 export const  AdminContextProvider=(props)=>{
   const [aToken,setAToken]=useState(localStorage.getItem('aToken')?localStorage.getItem('aToken'):"")
   const [doctors,setDoctors] = useState([])
+  const [appointments,setAppointments] = useState([])
+  const [dashData,setDashData] = useState(false)
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL//official use this no process.env
 
@@ -17,7 +19,7 @@ export const  AdminContextProvider=(props)=>{
         headers:{   aToken   }});
         if(data.success){
           setDoctors(data.doctors)
-          console.log(data.doctors);
+          
         }
         else{
           toast.error(data.message)
@@ -26,6 +28,22 @@ export const  AdminContextProvider=(props)=>{
 
     }catch(err){
         toast.error(err.message)
+    }
+  }
+  const getAllAppointments= async ()=>{
+    try{
+      const {data} = await axios.get(backendUrl+"/api/admin/appointments",{headers:{aToken:aToken}})
+
+      if(data.success){
+        setAppointments(data.appointments)
+        
+
+      }else{
+        toast.error(data.message)
+      }
+    }catch(err){
+      console.log(err.message)
+      toast.error(err.message)
     }
   }
 
@@ -45,12 +63,50 @@ export const  AdminContextProvider=(props)=>{
       toast.error(err.message)
     }
   }
+
+  const cancelAppointment = async (appointmentId)=>{
+    try{
+      const {data} = await axios.post(backendUrl+'/api/admin/cancel-appointment',{appointmentId},{headers:{aToken:aToken}})
+      if(data.success){
+        toast.success(data.message)
+        getAllAppointments()
+      }else{
+        toast.error(data.message)
+      }
+
+    }catch(err){
+      toast.error(err.message)
+
+    }
+  }
+
+  const getDashData = async()=>{
+    try{
+      const {data}= await axios.get(backendUrl+"/api/admin/dashboard",{headers:{aToken:aToken}})
+      if(data.success){
+        setDashData(data.dashData)
+        
+      }else{
+        toast.error(data.message)
+      }
+
+    }catch(err){
+      toast.error(err.message)
+
+    }
+  }
     const value ={
       aToken,setAToken,
       backendUrl,
       doctors,
       getAllDoctors,
-      changeAvailability
+      changeAvailability,
+      appointments,
+      setAppointments,
+      getAllAppointments,
+      cancelAppointment,
+      getDashData,
+      dashData
 
     }
   return (

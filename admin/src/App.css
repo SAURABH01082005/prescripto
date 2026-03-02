@@ -1,3 +1,6 @@
 input, select, textarea {
     border-color: var(--color-primary-border);
 }
+.border,.border-b {
+    border-color: var(--color-primary-border);
+}

@@ -95,7 +95,7 @@ export default function MyProfile() {
           <p className='font-medium'>Gender:</p>
                  {
         isEdit 
-        ? <select className='max-w-20 bg-gray-100 ' name="" id="" onChange={(e)=>setUserData(pre=>({...pre,gender:e.target.value}))} value={userData.gender}>
+        ? <select className='max-w-20 bg-gray-100 ' name="" id="" onChange={(e)=>setUserData(pre=>({...pre,gender:e.target.value}))} value={userData.gender} >
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
@@ -104,7 +104,7 @@ export default function MyProfile() {
       <p className='font-medium'>Birthday:</p>
       {
         isEdit
-        ? <input className='max-w-28 bg-gray-100 ' type='date' onChange={(e)=>setUserData(pre=>({...pre,dob:e.target.value}))} value={userData.dob}/>
+        ? <input className='max-w-28 bg-gray-100 ' type='date' onChange={(e)=>setUserData(pre=>{ return ({...pre,dob:e.target.value})})} value={userData.dob} />
         : <p className='text-gray-400'>{userData.dob}</p>
       }
 
