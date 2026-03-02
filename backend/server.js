@@ -9,7 +9,7 @@ import userRouter from './routes/userRoute.js'
 
 //app config
 const app=express()
-const port =process.env.PORT || 4000
+const port ='https://prescripto-vjla.onrender.com/' || process.env.PORT
 connectDB()
 connectCloudinary()
 
