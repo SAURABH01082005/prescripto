@@ -1,3 +1,4 @@
+import doctorModel from '../model/doctorModel'
 import bedModel from '../model/government/bedModel'
 import patientModel from '../model/government/patientModel'
 
@@ -93,4 +94,33 @@ const addPatientReport = async (req, res) => {
     }
 }
 
-export { getBedsBySpeciality, setBedsBySpeciality,addPatient,addPatientReport }
+const getSpecialitiesAvailable = async (req, res) => {
+    try {
+        const specialities = await doctorModel.distinct(speciality, { available: true })//array of strings
+        res.json({ success: true, specialities })
+    } catch (err) {
+        res.json({ success: false, message: err.message })
+        console.log(err.message)
+    }
+}
+
+//get hospital details
+
+const getHospitalDetails = async (req, res) => {
+    try {
+        const hospitalName = process.env.HOSPITAL_NAME
+        const hospitalStreet = process.env.HOSPITAL_STREET
+        const hospitalCity = process.env.HOSPITAL_CITY
+        const hospitalState = process.env.HOSPITAL_STATE
+        const hospitalPincode = process.env.HOSPITAL_PINCODE
+        const address = {
+            hospitalName, hospitalPincode, hospitalState, hospitalStreet, hospitalCity
+        }
+        res.json({ success: true, address })
+
+    } catch (err) {
+        res.json({ success: false, message: err.message })
+        console.log(err.message)
+    }
+}
+export { getBedsBySpeciality, setBedsBySpeciality, addPatient, addPatientReport, getSpecialitiesAvailable,getHospitalDetails }
