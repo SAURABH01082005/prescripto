@@ -1,6 +1,60 @@
-import doctorModel from '../model/doctorModel'
-import bedModel from '../model/government/bedModel'
-import patientModel from '../model/government/patientModel'
+import doctorModel from '../model/doctorModel.js'
+import bedModel from '../model/government/bedModel.js'
+import patientModel from '../model/government/patientModel.js'
+import axios from 'axios'
+import userModel from '../model/userModel.js'
+import bcrypt from 'bcryptjs'
+
+
+const getPatientCredentials = async (req, res) => {
+    try {
+        // console.log("getPatientCredentials called")
+        const { email, password } = req.body
+        const data = await userModel.findOne({ email })
+        if (!data) {
+            return res.json({ success: false, message: "User not found" })
+        }
+        const isMatch = await bcrypt.compare(password, data.password)
+        if (!isMatch) {
+            return res.json({ success: false, message: "Invalid Hospital Credentials" })
+        }
+
+
+        const patientData = await patientModel.findOne({ "patientDetails.uniqueGovId": data._id.toString() + process.env.HOSPITAL_ID }).select("patientDetails.uniqueGovId")
+
+        if (!patientData) {
+            return res.json({ success: false, message: "Patient is not Registered by Hospital yet" })
+        }
+
+        res.json({ success: true, uniqueGovPatientId: patientData.patientDetails.uniqueGovId })
+        console.log("Patient Credentials sent successfully")
+
+    } catch (err) {
+        res.json({ success: false, message: err.message })
+        console.log(err.message + " : error from hospital module")
+    }
+}
+
+const getDoctorCredentials = async (req, res) => {
+    try {
+        const { email, password } = req.body
+        const data = await doctorModel.findOne({ email })
+        if (!data) {
+            return res.json({ success: false, message: "User not found" })
+        }
+        const isMatch = await bcrypt.compare(password, data.password)
+        if (!isMatch) {
+            return res.json({ success: false, message: "Invalid Hospital Credentials" })
+        }
+
+        res.json({ success: true, uniqueGovDoctorId: data._id.toString() + process.env.HOSPITAL_ID, name: data.name })
+
+    } catch (err) {
+        res.json({ success: false, message: err.message })
+        console.log(err.message + " : error from hospital module")
+    }
+}
+
 
 const getBedsBySpeciality = async (req, res) => {
     try {
@@ -59,27 +113,23 @@ const addBeds = async (req, res) => {
 
 const addPatient = async (req, res) => {
     try {
-        const { patientId } = req.body
+        const { patientDetails, reference } = req.body
 
-        const data = await patientModel.create({ patientId })
-        if (data.success) {
-            res.json({ success: true, message: "Patient Added Successfully" })
+        const data = await patientModel.create({ patientDetails, reference })
 
-        } else {
-            res.json({ success: false, message: data.message })
-        }
+        res.json({ success: true, message: "Patient Added successfully" })
 
     } catch (err) {
-        res.json({ success: false, message: err.message })
+        res.json({ success: false, message: err.message+"999999999999999999999" })
         console.log(err.message)
     }
 }
 
 const addPatientReport = async (req, res) => {
     try {
-        const { report, patientId } = req.body
+        const { report, uniqueGovId } = req.body
 
-        const data = await patientModel.findOneAndUpdate({ patientId }, { $push: { report: { report } } }, { new: true })
+        const data = await patientModel.findOneAndUpdate({ 'patientDetails.uniqueGovId': uniqueGovId }, { $push: { report: report } }, { new: true })
 
         if (data.success) {
             res.json({ success: true, message: "Patient Report Added Successfully" })
@@ -123,4 +173,35 @@ const getHospitalDetails = async (req, res) => {
         console.log(err.message)
     }
 }
-export { getBedsBySpeciality, setBedsBySpeciality, addPatient, addPatientReport, getSpecialitiesAvailable,getHospitalDetails }
+
+const getDocId = async (req, res) => {
+    const docId = req.docId
+    res.json({ success: true, docId })
+
+}
+
+const getUserDetails = async (req, res) => {
+    try {
+        const { userId } = req.body
+        const userData = await userModel.findById(userId)
+        res.json({ success: true, userData })
+    } catch (err) {
+        res.json({ success: false, message: err.message })
+        console.log(err.message)
+    }
+
+}
+const getPatientDetails = async (req, res) => {
+    try {
+        const { patientAppointmentId } = req.body
+        const patientData = await  patientModel.find({'patientDetails.uniqueGovAppointmentId':patientAppointmentId})
+        if(patientData.length >0)
+        return res.json({ success: false, message: "Patient Already Registered for this Appointment" })
+        res.json({ success: true, patientData })
+    } catch (err) {
+        res.json({ success: false, message: err.message })
+        console.log(err.message)
+    }
+
+}
+export {getPatientDetails, getUserDetails, getDocId, getBedsBySpeciality, setBedsBySpeciality, addPatient, addPatientReport, getSpecialitiesAvailable, getHospitalDetails, addBeds, getPatientCredentials, getDoctorCredentials }

@@ -4,8 +4,8 @@ const bedSchema = new mongoose.Schema({
     bedType:{
         type:String,required:true
     },
-    bedNumber:{
-        type:Number, required:true,
+    bedId:{
+        type:String, required:true,
     },
     speciality:{
         type:String,required:true,

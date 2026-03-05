@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 //nagaArogya  authentication middleware
 const authGovernment = async (req,res,next)=>{
     try{
+        // console.log("authGovernment middleware called")
         const {gtoken} = req.headers
         if(!gtoken){
             return res.json({success:false,message:"Not Authorized Login Again"})
@@ -11,6 +12,7 @@ const authGovernment = async (req,res,next)=>{
         if(token_decode !== process.env.NAGAR_AAROGYA_EMAIL + process.env.NAGAR_AAROGYA_PASSWORD){
             return res.json({success:false,message:"Not Authorized Login Again"})
         }
+        // console.log("Government Authentication Successful")
        
         next();
 
