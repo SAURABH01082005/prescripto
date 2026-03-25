@@ -27,8 +27,6 @@ function Login() {
           }
 
         }else{
-         
-
           const {data} = await axios.post(backendUrl+"/api/doctor/login",{email,password})
           if(data.success){
             localStorage.setItem("dToken",data.token)
@@ -44,6 +42,7 @@ function Login() {
         }
 
       }catch (err){
+        toast.error(err.message)
 
       }
 

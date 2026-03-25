@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export default function Appointment() {
   const {docId}=useParams();
-  const {doctors,currencySymbol,backendUrl,token , getDoctorsData}=useContext(AppContext);
+  const {doctors,currencySymbol,backendUrl,token , getDoctorsData,userWander , setUserWander}=useContext(AppContext);
   const [docInfo,setDocInfo]=useState(null);
   const [docSlot,setDocSlot]=useState([])
   const [slotIndex,setSlotIndex]=useState(0);
@@ -79,6 +79,7 @@ export default function Appointment() {
   const bookAppointment = async ()=>{
     if(!token){
       toast.warn("Login to book an appointment")
+      setUserWander({status:"booking appointment",docId:docId})
       return navigate("/login")
     }
     try{

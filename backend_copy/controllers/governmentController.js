@@ -20,14 +20,14 @@ const getPatientCredentials = async (req, res) => {
         }
 
 
-        const patientData = await patientModel.findOne({ "detail.userId": data._id.toString() })
+        const patientData = await patientModel.findOne({ "patientDetails.uniqueGovId": data._id.toString() + process.env.HOSPITAL_ID }).select("patientDetails reference")
 
 
         if (!patientData) {
             return res.json({ success: false, message: "Patient is not Registered by Hospital yet" })
         }
 
-        res.json({ success: true, data: patientData })
+        res.json({ success: true, patientData })
         console.log("Patient Credentials sent successfully")
 
     } catch (err) {
@@ -50,13 +50,11 @@ const getDoctorCredentials = async (req, res) => {
 
         const doctorDetails = {
             name: data.name,
-            docId:data._id,
-            speciality:data.speciality,
-            degree:data.degree,
+            uniqueGovDoctorId: data._id.toString() + process.env.HOSPITAL_ID,
             image: data.image
         }
 
-        return res.json({ success: true, data:{doctorDetails} })
+        res.json({ success: true, doctorDetails })
 
     } catch (err) {
         res.json({ success: false, message: err.message })
@@ -64,15 +62,6 @@ const getDoctorCredentials = async (req, res) => {
     }
 }
 
-// const getGovRegisteredPatient= async (req,res)=>{
-//     try{
-//         const data = await patientModel.find({})
-
-//     }catch (err) {
-//         res.json({ success: false, message: err.message })
-//         console.log(err.message + " : error from hospital module")
-//     }
-// }
 
 const getBedsBySpeciality = async (req, res) => {
     try {
@@ -124,40 +113,24 @@ const addBeds = async (req, res) => {
         }
 
     } catch (err) {
-        res.json({ success: false, message: err.message + "from addBeds function error in hospital module" })
+        res.json({ success: false, message: err.message })
         console.log(err.message)
     }
 }
 
 const addPatient = async (req, res) => {
     try {
-        const { patientDetail, detail } = req.body
+        const { patientDetails, reference } = req.body
 
-        const data = await patientModel.create({ patientDetail, detail })
+        const data = await patientModel.create({ patientDetails, reference })
 
         res.json({ success: true, message: "Patient Added successfully" })
 
     } catch (err) {
-        res.json({ success: false, message: err.message + "from addPatient function error in hospital module" })
+        res.json({ success: false, message: err.message + "999999999999999999999" })
         console.log(err.message)
     }
 }
-
-const getPatientDetails = async (req, res) => {
-    try {
-        const { patientAppointmentId } = req.body
-        const patientData = await patientModel.find({ "detail.appointmentId": patientAppointmentId })
-        // console.log("patientData is ********************",patientData)
-        if (patientData.length > 0)
-            return res.json({ success: false, message: "Patient Already Registered for this Appointment" })
-        res.json({ success: true, data: patientData })
-    } catch (err) {
-        res.json({ success: false, message: err.message + "from getpatientDetails function error in hospital module" })
-        console.log(err.message)
-    }
-
-}
-
 
 const addPatientReport = async (req, res) => {
     try {
@@ -178,20 +151,17 @@ const addPatientReport = async (req, res) => {
     }
 }
 
-
-
-
 const getSpecialitiesAvailable = async (req, res) => {
     try {
-
+        
         const specialities = await doctorModel.distinct("speciality", { available: true })//array of strings
         // const hospitalAddress = `${process.env.HOSPITAL_NAME} , ${process.env.HOSPITAL_STREET} , ${process.env.HOSPITAL_CITY} , ${process.env.HOSPITAL_STATE} , ${process.env.HOSPITAL_PINCODE}`
-        const hospitalAddress = "28, Yashwant Vidyalaya Rd, section 30 A, Krishna Nagar, Ulhasnagar, Maharashtra 421004"
-        const appointmentPage = `${process.env.HOSPITAL_FRONTEND_URL}/doctor`
-
-        res.json({ success: true, data: { specialities, hospitalAddress, appointmentPage } })
+        const hospitalAddress = "New Star Bekary, Shop No 2, F Cabin Rd, Katemanivali, Kalyan E, Mumbai, Kalyan, Maharashtra 421306"
+         const appointmentPage = `${process.env.HOSPITAL_FRONTEND_URL}/doctor`
+         
+        res.json({ success: true, data:{specialities,hospitalAddress,appointmentPage}})
     } catch (err) {
-        res.json({ success: false, message: err.message+"from hospital module" })
+        res.json({ success: false, message: err.message })
         console.log(err.message)
     }
 }
@@ -218,17 +188,14 @@ const getHospitalDetails = async (req, res) => {
 
 const getDocId = async (req, res) => {
     const docId = req.docId
-    res.json({ success: true,data: docId })
+    res.json({ success: true, docId })
 
 }
 
 const getUserDetails = async (req, res) => {
     try {
         const { userId } = req.body
-        console.log("userId is ", userId)
         const userData = await userModel.findById(userId)
-        if (!userData)
-            return res.json({ success: false, message: "User not exist anymore" })
         res.json({ success: true, userData })
     } catch (err) {
         res.json({ success: false, message: err.message })
@@ -236,5 +203,17 @@ const getUserDetails = async (req, res) => {
     }
 
 }
+const getPatientDetails = async (req, res) => {
+    try {
+        const { patientAppointmentId } = req.body
+        const patientData = await patientModel.find({ 'patientDetails.uniqueGovAppointmentId': patientAppointmentId })
+        if (patientData.length > 0)
+            return res.json({ success: false, message: "Patient Already Registered for this Appointment" })
+        res.json({ success: true, patientData })
+    } catch (err) {
+        res.json({ success: false, message: err.message })
+        console.log(err.message)
+    }
 
+}
 export { getPatientDetails, getUserDetails, getDocId, getBedsBySpeciality, setBedsBySpeciality, addPatient, addPatientReport, getSpecialitiesAvailable, getHospitalDetails, addBeds, getPatientCredentials, getDoctorCredentials }

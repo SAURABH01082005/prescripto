@@ -7,6 +7,7 @@ import { useEffect ,useState} from "react";
 export const AppContext=createContext();
 
 const AppContextProvider=(props)=>{
+  const [userWander , setUserWander] = useState({})
   const [doctors,setDoctors] = useState([])
   const currencySymbol= '$'
   const backendUrl = import.meta.env.VITE_BACKEND_URL//official use this no process.env
@@ -50,7 +51,7 @@ const AppContextProvider=(props)=>{
     }
   }
 
-  const value={ getDoctorsData,   doctors  , currencySymbol  , token, setToken , backendUrl,setUserData,userData, loadUserProfileData};
+  const value={ getDoctorsData,   doctors  , currencySymbol  , token, setToken , backendUrl,setUserData,userData, loadUserProfileData,userWander , setUserWander};
 
   useEffect(()=>{
     getDoctorsData()

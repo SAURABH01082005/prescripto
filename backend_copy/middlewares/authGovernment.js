@@ -9,12 +9,11 @@ const authGovernment = async (req,res,next)=>{
             return res.json({success:false,message:"Not Authorized Login Again"})
         }
         const token_decode = jwt.verify(gtoken,process.env.JWT_SECRET_GOVERNMENT)
-        console.log("token_decode",token_decode)
         if(token_decode !== process.env.NAGAR_AAROGYA_EMAIL + process.env.NAGAR_AAROGYA_PASSWORD){
             return res.json({success:false,message:"Not Authorized Login Again"})
         }
-        console.log("Government Authentication Successful")
-        
+        // console.log("Government Authentication Successful")
+       
         next();
 
     }catch(err){

@@ -16,14 +16,34 @@ function DoctorAppointments() {
   //*adding patient to IPD
   const IDPHandler = async (item) => {
 
-    const userData = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/government/get-userdetails`, { userId: item.userId }, { headers: { dtoken: dToken } })
+    //checking if patient already exists
+   
+    const isAlreadyUser = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/government/get-patientdetails`, { patientAppointmentId: item._id.toString() }, { headers: { dtoken: dToken } })
+
+    if (!isAlreadyUser.data.success) {
+      return toast.error(isAlreadyUser.data.message)
+    }
+  
+  
+
+    //geting user details for a appointment
+    const userData= await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/government/get-userdetails`, { userId: item.userId}, { headers: { dtoken: dToken } })
     if (!userData.data.success) {
-      return toast.error(userData.data.message || "Patient addition Unsuccessfull")
+      return toast.error(userData.data.message|| "Patient addition Unsuccessfull")
+    }
+    //  console.log("******************testing****************patientData is ",userData)
+
+
+    
+
+    const data1 = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/government/get-docid`, { headers: { dtoken: dToken } })
+    if (!data1.data.success) {
+      return toast.error("Docid not Found")
+
     }
 
-    const patientDetails = {
-      "uniqueGovId": userData.data.userData._id + import.meta.env.VITE_HOSPITAL_ID,
-      "uniqueGovAppointmentId": item._id + import.meta.env.VITE_HOSPITAL_ID,
+
+    const patientDetail = {
       "name": userData.data.userData.name,
       "dob": new Date(userData.data.userData.dob),
       "address": userData.data.userData.address,
@@ -31,31 +51,17 @@ function DoctorAppointments() {
       "gender": userData.data.userData.gender,
       "phone": userData.data.userData.phone
     }
-
-    //checking if patient already exists
    
-    const isAlreadyUser = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/government/get-patientdetails`, { patientAppointmentId: item._id.toString() + import.meta.env.VITE_HOSPITAL_ID }, { headers: { dtoken: dToken } })
+    
 
-    if (!isAlreadyUser.data.success) {
-      return toast.error(isAlreadyUser.data.message)
+    const detail= {
+            "hospitalId":import.meta.env.VITE_HOSPITAL_ID ,
+            "appointmentId": item._id ,
+            "userId":  userData.data.userData._id,
+            "docId":data1.data.data,
     }
 
-
-    const data1 = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/government/get-docid`, { headers: { dtoken: dToken } })
-    if (!data1.data.success) {
-      return toast.error(data1.data.message || "Patient addition Unsuccessfull")
-
-    }
-
-    const reference = {
-      "hospitalId": import.meta.env.VITE_HOSPITAL_ID,
-      "patientId": userData.data.userData._id,
-      "docId": data1.data.docId,
-
-      "reason": "New Registration"
-    }
-
-    const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/government/add-patient`, { patientDetails, reference }, { headers: { dtoken: dToken } })
+    const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/government/add-patient`, { patientDetail,detail }, { headers: { dtoken: dToken } })
     if (!data.success) {
       return toast.error(data.message  || "Patient addition Unsuccessfull")
     }

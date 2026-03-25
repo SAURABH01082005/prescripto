@@ -1,4 +1,5 @@
-let a = "2025-02-12"
+let a= []
 
-const b =new Date(a)
-console.log(new Date(a))
+console.log(a.length)
+// const b =new Date(a)
+// console.log(new Date(a))

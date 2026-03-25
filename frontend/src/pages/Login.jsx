@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 
 export default function Login() {
 
-  const {backendUrl,token,setToken} = useContext(AppContext)
+  const {backendUrl,token,setToken,setUserWander,userWander} = useContext(AppContext)
   const [state,setSate]=useState("Sign Up")
   const [email,setEmail]=useState("")
   const [name,setName]=useState("")
@@ -41,6 +41,12 @@ export default function Login() {
           localStorage.setItem("token",data.token)
           setToken(data.token)
           toast.success(data.message)
+           if(userWander?.status=='booking appointment'){
+            
+            navigate(`/appointment/${userWander.docId}`)
+            setUserWander({status:"going to appointment"})
+
+          }
 
         }else{
           toast.error(data.message)
@@ -55,7 +61,7 @@ export default function Login() {
 
   }
   useEffect(()=>{
-    if(token){
+    if(token && userWander?.status!=="going to appointment"){
       navigate("/")
     }},[token]);
   return (
